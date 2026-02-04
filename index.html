@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Money Management App</title>
+  <style>
+    body { font-family: Arial; background: #f2f6ff; padding: 15px; }
+    h2 { text-align: center; }
+    .tabs { text-align: center; margin-bottom: 10px; }
+    .tabs button {
+      padding: 8px 14px;
+      margin: 4px;
+      border: none;
+      background: #2196F3;
+      color: white;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+    th { background: #4CAF50; color: white; }
+    input { width: 100%; border: none; text-align: center; }
+    .sheet { display: none; }
+    .active { display: block; }
+    .total { text-align: right; margin-top: 8px; font-size: 16px; }
+    button.add { background: #4CAF50; margin-top: 6px; }
+  </style>
+</head>
+
+<body>
+
+<h2>💰 Money Management App</h2>
+
+<div class="tabs">
+  <button onclick="openSheet('s1')">Sheet 1</button>
+  <button onclick="openSheet('s2')">Sheet 2</button>
+  <button onclick="openSheet('s3')">Sheet 3</button>
+</div>
+
+<!-- SHEET 1 -->
+<div id="s1" class="sheet active">
+  <table id="t1">
+    <tr>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Money In</th>
+      <th>Money Out</th>
+    </tr>
+  </table>
+  <button class="add" onclick="addRow('t1','in1','out1')">➕ Add Row</button>
+  <div class="total">In ₹ <span id="in1">0</span> | Out ₹ <span id="out1">0</span></div>
+</div>
+
+<!-- SHEET 2 -->
+<div id="s2" class="sheet">
+  <table id="t2">
+    <tr>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Money In</th>
+      <th>Money Out</th>
+    </tr>
+  </table>
+  <button class="add" onclick="addRow('t2','in2','out2')">➕ Add Row</button>
+  <div class="total">In ₹ <span id="in2">0</span> | Out ₹ <span id="out2">0</span></div>
+</div>
+
+<!-- SHEET 3 -->
+<div id="s3" class="sheet">
+  <table id="t3">
+    <tr>
+      <th>Date</th>
+      <th>Description</th>
+      <th>Money In</th>
+      <th>Money Out</th>
+    </tr>
+  </table>
+  <button class="add" onclick="addRow('t3','in3','out3')">➕ Add Row</button>
+  <div class="total">In ₹ <span id="in3">0</span> | Out ₹ <span id="out3">0</span></div>
+</div>
+
+<script>
+function openSheet(id) {
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function addRow(tableId, inId, outId) {
+  let table = document.getElementById(tableId);
+  let row = table.insertRow();
+
+  for (let i = 0; i < 4; i++) {
+    let cell = row.insertCell();
+    let input = document.createElement("input");
+    input.type = (i === 2 || i === 3) ? "number" : "text";
+    input.oninput = () => calculate(tableId, inId, outId);
+    cell.appendChild(input);
+  }
+}
+
+function calculate(tableId, inId, outId) {
+  let tin = 0, tout = 0;
+  let table = document.getElementById(tableId);
+
+  for (let i = 1; i < table.rows.length; i++) {
+    tin += Number(table.rows[i].cells[2].children[0].value) || 0;
+    tout += Number(table.rows[i].cells[3].children[0].value) || 0;
+  }
+  document.getElementById(inId).innerText = tin;
+  document.getElementById(outId).innerText = tout;
+}
+</script>
+
+</body>
+</html>
